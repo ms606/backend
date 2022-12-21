@@ -5,33 +5,15 @@ async function get(req, res, next) {
   try {
     const context = {};
 
-    console.log(req.params)
+    //console.log(req.params, 'emp img req.params')
     
     context.id = parseInt(req.params.id, 10);
  
     const rows = await employees.find(context);
     
-    console.log(req.params)
+    //console.log('rows from image controller', rows)
 
     res.status(200).json(rows);
-
-    // if (req.params.id) {
-    //   if (rows.length === 1) {
-
-
-    //     console.log('status',rows)
-
-    //     res.status(200).json(rows);
-
-      
-
-
-    //   } else {
-    //     res.status(404).end();
-    //   }
-    // } else {
-    //   res.status(200).json(rows);
-    // }
 
   } catch (err) {
     next(err);

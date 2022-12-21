@@ -9,11 +9,10 @@ const baseQuery =
   async function find(context) {
     let query = baseQuery;
     const binds = {};
-  
+       console.log(context, 'emp image')
     if (context.id) {
       binds.ecode = context.id;
-  
-      query += `\nwhere ecode = :ecode`;
+      query += `\n where ecode = :ecode`;
     }
   
     const result = await database.simpleExecute(query, binds,
@@ -27,10 +26,12 @@ const baseQuery =
     //   var base64data = reader.result;                
     //   console.log(base64data);
     //}
+
+
     //console.log(result)
     const blob = result.rows[0]
 
-    console.log(blob)
+  //  console.log(blob)
     
   
     return blob;

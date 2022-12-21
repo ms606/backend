@@ -7,6 +7,7 @@ var cors = require('cors');
 
 let httpServer;
 
+
 function initialize(){
     return new Promise((resolve, reject) => {
      const app = express();
@@ -20,8 +21,8 @@ function initialize(){
      app.use(express.json({
         revive: reviveJson
        }));
-     app.use('/api', router);
-
+       
+     app.use('/api', router );
 
      httpServer.listen(webServerConfig.port)
       .on('listening', () => {

@@ -1,7 +1,6 @@
 const database = require('../services/database.js');
 const oracledb = require('oracledb');
 
-
 const baseQuery = `select uname, ecode from employee_master`;
 
 async function find(context) {
@@ -9,7 +8,7 @@ async function find(context) {
  const binds = {};
  
     if (context) {
-         query += `\n where uname = '${context.email}' and PASWD = '${context.password}'`;
+         query += `\n where uname = upper('${context.email}') and PASWD = '${context.password}'`;
     }
   
     const result = await database.simpleExecute(query, binds);

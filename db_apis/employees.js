@@ -16,14 +16,16 @@ const baseQuery =
   async function find(context) {
     var query = baseQuery;
     var binds = {};
-    console.log('context 22', context)
-    if (context.id) {
-      binds.ecode = context.id;
-  
-      query += `\nwhere ecode = :ecode`;
-    }
-    console.log(query, binds)
-    const result = await database.simpleExecute(query, binds);
+
+   //console.log('context 22', context)
+   if (context.id)  {
+    binds.ecode = context.id;
+    query += `\n where ecode = :ecode`;
+  } 
+   
+   // console.log(query, binds)
+   var result;
+    result = await database.simpleExecute(query, binds);
   
     return result.rows;
   }
@@ -149,7 +151,7 @@ const employeeTimingQuery =
   `;
 
   async function getTiming(context) {
-    console.log("context",context)
+   // console.log("context",context)
 
     let timquery = employeeTimingQuery;
     let binds_time = {};
@@ -159,7 +161,7 @@ const employeeTimingQuery =
       binds_time.edate  = context.date;
       timquery += `where to_char(to_date(edate,'dd-mm-rrrr'),'mm-rrrr') = to_char(to_date(to_date(:edate,'rrrr-mm-dd'),'dd-mm-rrrr'),'mm-rrrr') and ecode = :ecode`;
     } 
-    console.log('rows',  timquery, binds_time)
+  //  console.log('rows',  timquery, binds_time)
     let result = await database.simpleExecute(timquery, binds_time);
      
     return result.rows;
@@ -171,17 +173,18 @@ const employeeTimingQuery =
 // Employee Salary for specific person
   async function getSalary(context) {
     query = 
-    `select ecode, to_char(edate) edate, ename, fname, dpnam, dsnam, netsalary, biocheck from employee_salary`;
+    `select ecode, to_char(edate) edate, ename, fname, dpnam, dsnam, netsalary, biocheck 
+     from employee_salary`;
    
     binds = {};
     
     if (context.id) {
       binds.ecode = context.id;
-        query += ` where ecode = :ecode`;
+        query += ` where ecode = :ecode order by to_date(edate, 'dd-month-rrrr') desc`;
     } 
    // console.log('rows', query, binds)
     result = await database.simpleExecute(query, binds);
-    console.log('result', result)
+   // console.log('result', result)
 
     return result.rows;
   }  
@@ -201,7 +204,7 @@ async function getSalaryEarning(context) {
     and    amt > 0
     and    to_char(to_date(sm.edate,'dd-mm-rrrr'),'rrrr-mm') = to_char(to_date(:edate,'dd-mon-rr'),'rrrr-mm')`;
 
-  console.log('context',context)
+ // console.log('context',context)
  
   binds = {};
   
@@ -212,7 +215,7 @@ async function getSalaryEarning(context) {
   } 
   //console.log('rows', query, binds)
   result = await database.simpleExecute(query, binds);
-  console.log('result', result)
+ // console.log('result', result)
 
   return result.rows;
 }  
@@ -240,7 +243,7 @@ async function getSalaryDeduction(context) {
   } 
   //console.log('rows', query, binds)
   result = await database.simpleExecute(query, binds);
-  console.log('result', result)
+ // console.log('result', result)
 
   return result.rows;
 }  
@@ -272,7 +275,7 @@ async function getSalarySummary(context) {
   } 
   //console.log('rows', query, binds)
   result = await database.simpleExecute(query, binds);
-  console.log('result', result)
+ // console.log('result', result)
 
   return result.rows;
 }  
@@ -280,7 +283,7 @@ module.exports.getSalarySummary = getSalarySummary;
 
 
 async function getEmployeeDetail(context){
-  console.log('context', context)
+ // console.log('context', context)
   binds = {};
   query = `select ecode, ename, to_char(sysdate,'Mon-yyyy') mont,
   sum( case when status = 'On Time' then 1 else 0 end)  onTime,
