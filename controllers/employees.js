@@ -9,36 +9,38 @@ async function get(req, res, next) {
     const context = {};
 
     context.id = parseInt(req.params.id, 10);
-    console.log(context, req.params.id,'resposeeeeeeeeeeeeeeee 111111');
+    // console.log(context, req.params.id,'resposeeeeeeeeeeeeeeee 111111');
     
     authJwt.verifyToken(req, res, next);
 
-    console.log(context, req.params, req.id,'resposeeeeeeeeeeeeeeee 222222');
-    
-    var rows;
-
-    if(req.id){
-       rows = await employees.find(context); 
+    // console.log(context, req.params, req.id,'resposeeeeeeeeeeeeeeee 222222');
+    console.log(res.statusCode,'response from auth');
+    if (res.statusCode == 304){
+       res.status(500).send('Cant Authorise!')
     }
+      else 
+      {
+        var rows;
+
+        if(req.id){
+           rows = await employees.find(context); 
+        }
+       
+        // console.log('result',rows)
+        // console.log('req',req.id)
+        
+        if (req.id) {
+           if (rows.length === 1) {
+            res.status(200).json(rows[0]);
+           } else {
+             res.status(404).end();
+           }
+         } else {
+           res.status(200).json(rows);
+         }
+      } 
+      }
     
-    console.log('result',rows)
-    console.log('req',req.id)
-    
-    if (req.id) {
-      console.log('a')
-       if (rows.length === 1) {
-        console.log('b')
-         res.status(200).json(rows[0]);
-         console.log('c')
-       } else {
-        console.log('d')
-         res.status(404).end();
-         console.log('e')
-       }
-     } else {
-       res.status(200).json(rows);
-     }
-  } 
     catch (err) {
      next(err);
   }
