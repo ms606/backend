@@ -11,19 +11,22 @@ async function get(req, res, next) {
     context.id = parseInt(req.params.id, 10);
     // console.log(context, req.params.id,'resposeeeeeeeeeeeeeeee 111111');
     
-    authJwt.verifyToken(req, res, next);
+    await authJwt.verifyToken(req, res, next);
 
     // console.log(context, req.params, req.id,'resposeeeeeeeeeeeeeeee 222222');
     console.log(res.statusCode,'response from auth');
-    if (res.statusCode == 304){
+
+    if (res.statusCode == 3041){
        res.status(500).send('Cant Authorise!')
     }
       else 
       {
+
         var rows;
 
         if(req.id){
            rows = await employees.find(context); 
+           console.log(rows)
         }
        
         // console.log('result',rows)
@@ -31,12 +34,17 @@ async function get(req, res, next) {
         
         if (req.id) {
            if (rows.length === 1) {
-            res.status(200).json(rows[0]);
+             res.status(200).send((rows[0]));
+           // console.log(res)
+           // res.send('data');
            } else {
+            console.log(res.statusCode,'loggggggg')
              res.status(404).end();
            }
          } else {
-           res.status(200).json(rows);
+          console.log(res.statusCode,'log111111111111')
+            res.status(200).json(rows);
+          null;
          }
       } 
       }
@@ -45,7 +53,6 @@ async function get(req, res, next) {
      next(err);
   }
 }
-
 module.exports.get = get;
 
 function getEmployeeFromRec(req){
