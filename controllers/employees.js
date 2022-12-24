@@ -16,26 +16,24 @@ async function get(req, res, next) {
     // console.log(context, req.params, req.id,'resposeeeeeeeeeeeeeeee 222222');
     console.log(res.statusCode,'response from auth');
 
-    if (res.statusCode == 3041){
+    if (res.statusCode == 304){
        res.status(500).send('Cant Authorise!')
     }
       else 
       {
-
         var rows;
 
         if(req.id){
            rows = await employees.find(context); 
            console.log(rows)
         }
-       
         // console.log('result',rows)
         // console.log('req',req.id)
         
         if (req.id) {
            if (rows.length === 1) {
              res.status(200).send((rows[0]));
-           // console.log(res)
+           // console.log(res);
            // res.send('data');
            } else {
             console.log(res.statusCode,'loggggggg')
